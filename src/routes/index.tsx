@@ -50,7 +50,8 @@ function Dashboard() {
           (category === "all" || r.category === category) &&
           (frequency === "all" || r.frequency === frequency) &&
           (status === "all" || r.status === status) &&
-          (r.category.toLowerCase().includes(query.toLowerCase()) ||
+          (r.title.toLowerCase().includes(query.toLowerCase()) ||
+            r.category.toLowerCase().includes(query.toLowerCase()) ||
             r.period.toLowerCase().includes(query.toLowerCase())),
       ),
     [query, category, frequency, status],
@@ -105,6 +106,7 @@ function Dashboard() {
                     <SelectItem value="Physio">Physio</SelectItem>
                     <SelectItem value="POD">POD</SelectItem>
                     <SelectItem value="Psych">Psych</SelectItem>
+                    <SelectItem value="PBI">PBI</SelectItem>
                   </SelectContent>
                 </Select>
                 <Select value={frequency} onValueChange={setFrequency}>
@@ -136,8 +138,7 @@ function Dashboard() {
                 <table className="w-full text-sm">
                   <thead className="sticky top-0 z-10 bg-surface">
                     <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
-                      <th className="border-b border-border px-4 py-2.5 font-medium">Category</th>
-                      <th className="border-b border-border px-4 py-2.5 font-medium">Frequency</th>
+                      <th className="border-b border-border px-4 py-2.5 font-medium">Report</th>
                       <th className="border-b border-border px-4 py-2.5 font-medium">Reporting Period</th>
                       <th className="border-b border-border px-4 py-2.5 font-medium">Status</th>
                       <th className="border-b border-border px-4 py-2.5 font-medium">Checklist</th>
@@ -152,8 +153,10 @@ function Dashboard() {
                         onClick={() => setSelected(r)}
                         className="group cursor-pointer border-b border-border last:border-0 hover:bg-surface"
                       >
-                        <td className="px-4 py-3 font-medium text-foreground">{r.category}</td>
-                        <td className="px-4 py-3 text-muted-foreground">{r.frequency}</td>
+                        <td className="px-4 py-3">
+                          <div className="font-medium text-foreground">{r.title}</div>
+                          <div className="text-xs text-muted-foreground">{r.frequency}</div>
+                        </td>
                         <td className="tabular whitespace-nowrap px-4 py-3 text-muted-foreground">{r.period}</td>
                         <td className="px-4 py-3">
                           <StatusBadge tone={reportTone(r.status)} label={r.status} />
