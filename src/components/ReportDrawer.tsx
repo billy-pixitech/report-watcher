@@ -64,7 +64,7 @@ export function ReportDrawer({
                 <Meta label="Period" value={<span className="tabular">{report.period}</span>} />
                 <Meta
                   label="Status"
-                  value={<StatusBadge tone={reportTone[report.status]} label={report.status} />}
+                  value={<StatusBadge tone={reportTone(report.status)} label={report.status} />}
                 />
                 <Meta label="Last Updated" value={<span className="tabular">{report.lastUpdatedFull}</span>} />
               </div>
@@ -91,7 +91,7 @@ export function ReportDrawer({
                           <td className="whitespace-nowrap px-4 py-2.5 font-medium text-foreground">{c.name}</td>
                           <td className="px-4 py-2.5">
                             <StatusBadge
-                              tone={c.status === "Failed" ? "danger" : reportTone[c.status]}
+                              tone={c.status === "Failed" ? "danger" : reportTone(c.status)}
                               label={c.status}
                             />
                           </td>
