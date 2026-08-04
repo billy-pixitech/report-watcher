@@ -227,6 +227,20 @@ export const reports: Report[] = [
     checklist: baseChecklist(true),
     generated: draftItems(MONTH, "PSYCH", "Monthly"),
   },
+  {
+    id: "pbi-monthly",
+    title: "Personal Billing Incentive (PBI)",
+    category: "PBI",
+    frequency: "Monthly",
+    period: MONTH,
+    status: "Published",
+    checklistDone: 4,
+    checklistTotal: 4,
+    lastUpdated: "02 Aug 18:20",
+    lastUpdatedFull: "02 Aug 2026 18:20",
+    checklist: baseChecklist(false),
+    generated: publishedItems(MONTH, "PBI", "Monthly"),
+  },
 ];
 
 export const kpis = [
