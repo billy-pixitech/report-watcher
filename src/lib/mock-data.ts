@@ -19,7 +19,7 @@ export type GeneratedItem = {
 export type Report = {
   id: string;
   title: string;
-  category: "EP" | "Physio" | "POD" | "Psych";
+  category: "EP" | "Physio" | "POD" | "Psych" | "PBI";
   frequency: "Fortnight" | "Monthly";
   period: string;
   status: ReportStatus;
@@ -112,7 +112,7 @@ const MONTH = "Jul 2026";
 export const reports: Report[] = [
   {
     id: "ep-fortnight",
-    title: "EP Performance Report",
+    title: "EP Fortnight Performance",
     category: "EP",
     frequency: "Fortnight",
     period: FORTNIGHT,
@@ -126,7 +126,7 @@ export const reports: Report[] = [
   },
   {
     id: "physio-fortnight",
-    title: "Physio Performance Report",
+    title: "Physio Fortnight Performance",
     category: "Physio",
     frequency: "Fortnight",
     period: FORTNIGHT,
@@ -140,7 +140,7 @@ export const reports: Report[] = [
   },
   {
     id: "pod-fortnight",
-    title: "POD Performance Report",
+    title: "POD Fortnight Performance",
     category: "POD",
     frequency: "Fortnight",
     period: FORTNIGHT,
@@ -154,7 +154,7 @@ export const reports: Report[] = [
   },
   {
     id: "psych-fortnight",
-    title: "Psych Performance Report",
+    title: "Psych Fortnight Performance",
     category: "Psych",
     frequency: "Fortnight",
     period: FORTNIGHT,
@@ -168,7 +168,7 @@ export const reports: Report[] = [
   },
   {
     id: "ep-monthly",
-    title: "EP Performance Report",
+    title: "EP Monthly Performance",
     category: "EP",
     frequency: "Monthly",
     period: MONTH,
@@ -182,7 +182,7 @@ export const reports: Report[] = [
   },
   {
     id: "physio-monthly",
-    title: "Physio Performance Report",
+    title: "Physio Monthly Performance",
     category: "Physio",
     frequency: "Monthly",
     period: MONTH,
@@ -201,7 +201,7 @@ export const reports: Report[] = [
   },
   {
     id: "pod-monthly",
-    title: "POD Performance Report",
+    title: "POD Monthly Performance",
     category: "POD",
     frequency: "Monthly",
     period: MONTH,
@@ -215,7 +215,7 @@ export const reports: Report[] = [
   },
   {
     id: "psych-monthly",
-    title: "Psych Performance Report",
+    title: "Psych Monthly Performance",
     category: "Psych",
     frequency: "Monthly",
     period: MONTH,
@@ -226,6 +226,20 @@ export const reports: Report[] = [
     lastUpdatedFull: "02 Aug 2026 18:00",
     checklist: baseChecklist(true),
     generated: draftItems(MONTH, "PSYCH", "Monthly"),
+  },
+  {
+    id: "pbi-monthly",
+    title: "Personal Billing Incentive (PBI)",
+    category: "PBI",
+    frequency: "Monthly",
+    period: MONTH,
+    status: "Published",
+    checklistDone: 4,
+    checklistTotal: 4,
+    lastUpdated: "02 Aug 18:20",
+    lastUpdatedFull: "02 Aug 2026 18:20",
+    checklist: baseChecklist(false),
+    generated: publishedItems(MONTH, "PBI", "Monthly"),
   },
 ];
 
