@@ -26,8 +26,8 @@ export function StatusBadge({
 }: {
   tone: Tone;
   label: string;
-  detail?: string;
-  className?: string;
+  detail?: string | undefined;
+  className?: string | undefined;
 }) {
   return (
     <span className="inline-flex items-center gap-2">
