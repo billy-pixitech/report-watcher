@@ -46,7 +46,7 @@ export function StatusBadge({
   );
 }
 
-export const reportTone: Record<string, Tone> = {
+const toneMap: Record<string, Tone> = {
   Published: "success",
   Draft: "warning",
   Failed: "danger",
@@ -56,3 +56,5 @@ export const reportTone: Record<string, Tone> = {
   Healthy: "success",
   Warning: "warning",
 };
+
+export const reportTone = (status: string): Tone => toneMap[status] ?? "muted";
