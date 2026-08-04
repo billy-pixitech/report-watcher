@@ -1,8 +1,15 @@
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { StatusBadge, reportTone } from "@/components/StatusBadge";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, X } from "lucide-react";
+import { RefreshCw, X, FileText, FileSpreadsheet, Users, BarChart3 } from "lucide-react";
 import type { Report, ItemTone } from "@/lib/mock-data";
+
+const itemIcon: Record<string, typeof FileText> = {
+  "Final Report": FileText,
+  "Master Report": FileSpreadsheet,
+  "Lead Reports": Users,
+  "Power BI": BarChart3,
+};
 
 const itemTone: Record<ItemTone, { dot: string; text: string }> = {
   draft: { dot: "bg-warning", text: "text-warning-foreground" },
@@ -112,12 +119,16 @@ export function ReportDrawer({
                       No items generated yet.
                     </div>
                   ) : (
-                    report.generated.map((g) => (
+                    report.generated.map((g) => {
+                      const Icon = itemIcon[g.name] ?? FileText;
+                      return (
                       <div
                         key={g.name}
                         className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3.5 shadow-card"
                       >
-                        <span className="text-base leading-6">{g.icon}</span>
+                        <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md bg-secondary text-muted-foreground">
+                          <Icon className="size-3.5" />
+                        </span>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between gap-3">
                             <span className="text-sm font-medium text-foreground">{g.name}</span>
@@ -135,7 +146,8 @@ export function ReportDrawer({
                           ))}
                         </div>
                       </div>
-                    ))
+                      );
+                    })
                   )}
                 </div>
               </section>
