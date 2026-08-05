@@ -33,32 +33,41 @@ export type Report = {
 
 const baseChecklist = (pendingLast: boolean, failIndex?: number): ChecklistItem[] => [
   {
-    name: "Crawl Nookal",
+    name: "Nookal Activity Extract",
     status: failIndex === 0 ? "Failed" : "Completed",
-    summary: failIndex === 0 ? "Crawler timed out after 3 retries" : "1,245 records processed successfully",
+    summary:
+      failIndex === 0
+        ? "Failed to generate 20260802_Nookal_Activity.csv. Nookal API timeout."
+        : "20260802_Nookal_Activity.csv generated — 1,245 records",
   },
   {
-    name: "Upload PracSuite",
+    name: "PracSuite Data Upload",
     status: failIndex === 1 ? "Failed" : "Completed",
-    summary: failIndex === 1 ? "Source file not found" : "Uploaded successfully",
+    summary:
+      failIndex === 1
+        ? "Failed to import 20260802_PracSuite.xlsx. Source file not found."
+        : "20260802_PracSuite.xlsx uploaded",
   },
   {
-    name: "Upload OM",
+    name: "OM Data Upload",
     status: failIndex === 2 ? "Failed" : "Completed",
-    summary: failIndex === 2 ? "Source file not found" : "Uploaded successfully",
+    summary:
+      failIndex === 2
+        ? "Failed to import 20260802_OM_Billing.xlsx. Source file not found."
+        : "20260802_OM_Billing.xlsx uploaded",
   },
   {
-    name: "Upload eHero",
+    name: "eHero Data Upload",
     status: pendingLast ? "Pending" : "Completed",
-    summary: pendingLast ? "Waiting for source data" : "Uploaded successfully",
+    summary: pendingLast ? "Waiting for 20260802_eHero.xlsx" : "20260802_eHero.xlsx uploaded",
   },
 ];
 
 const notStartedChecklist: ChecklistItem[] = [
-  { name: "Crawl Nookal", status: "Pending", summary: "Scheduled for 05 Aug 02:00" },
-  { name: "Upload PracSuite", status: "Pending", summary: "Waiting for source data" },
-  { name: "Upload OM", status: "Pending", summary: "Waiting for source data" },
-  { name: "Upload eHero", status: "Pending", summary: "Waiting for source data" },
+  { name: "Nookal Activity Extract", status: "Pending", summary: "Scheduled for 05 Aug 02:00" },
+  { name: "PracSuite Data Upload", status: "Pending", summary: "Waiting for YYYYMMDD_PracSuite.xlsx" },
+  { name: "OM Data Upload", status: "Pending", summary: "Waiting for YYYYMMDD_OM_Billing.xlsx" },
+  { name: "eHero Data Upload", status: "Pending", summary: "Waiting for YYYYMMDD_eHero.xlsx" },
 ];
 
 const draftItems = (period: string, code: string, freq: string): GeneratedItem[] => [
@@ -192,10 +201,10 @@ export const reports: Report[] = [
     lastUpdated: "02 Aug 17:05",
     lastUpdatedFull: "02 Aug 2026 17:05",
     checklist: [
-      { name: "Crawl Nookal", status: "Completed", summary: "1,180 records processed successfully" },
-      { name: "Upload PracSuite", status: "Completed", summary: "Uploaded successfully" },
-      { name: "Upload OM", status: "Pending", summary: "Waiting for source data" },
-      { name: "Upload eHero", status: "Pending", summary: "Waiting for source data" },
+      { name: "Nookal Activity Extract", status: "Completed", summary: "20260731_Nookal_Activity.csv generated — 1,180 records" },
+      { name: "PracSuite Data Upload", status: "Completed", summary: "20260731_PracSuite.xlsx uploaded" },
+      { name: "OM Data Upload", status: "Pending", summary: "Waiting for YYYYMMDD_OM_Billing.xlsx" },
+      { name: "eHero Data Upload", status: "Pending", summary: "Waiting for YYYYMMDD_eHero.xlsx" },
     ],
     generated: draftItems(MONTH, "PHYSIO", "Monthly"),
   },
