@@ -139,9 +139,9 @@ function Dashboard() {
                   <thead className="sticky top-0 z-10 bg-surface">
                     <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
                       <th className="border-b border-border px-4 py-2.5 font-medium">Report</th>
-                      <th className="border-b border-border px-4 py-2.5 font-medium">Reporting Period</th>
+                      <th className="border-b border-border px-4 py-2.5 font-medium">Period</th>
                       <th className="border-b border-border px-4 py-2.5 font-medium">Status</th>
-                      <th className="border-b border-border px-4 py-2.5 font-medium">Checklist</th>
+                      <th className="border-b border-border px-4 py-2.5 font-medium">Checks</th>
                       <th className="border-b border-border px-4 py-2.5 font-medium">Last Updated</th>
                       <th className="w-10 border-b border-border px-4 py-2.5" />
                     </tr>
@@ -155,9 +155,14 @@ function Dashboard() {
                       >
                         <td className="px-4 py-3">
                           <div className="font-medium text-foreground">{r.title}</div>
-                          <div className="text-xs text-muted-foreground">{r.frequency}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {r.category === "PBI" ? "PBI" : "Performance"}
+                          </div>
                         </td>
-                        <td className="tabular whitespace-nowrap px-4 py-3 text-muted-foreground">{r.period}</td>
+                        <td className="whitespace-nowrap px-4 py-3">
+                          <div className="text-foreground">{r.frequency}</div>
+                          <div className="tabular text-xs text-muted-foreground">{r.period}</div>
+                        </td>
                         <td className="px-4 py-3">
                           <StatusBadge tone={reportTone(r.status)} label={r.status} />
                         </td>
