@@ -1,8 +1,8 @@
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { StatusBadge, reportTone } from "@/components/StatusBadge";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, X, FileText, FileSpreadsheet, Users, BarChart3 } from "lucide-react";
-import type { Report, ItemTone } from "@/lib/mock-data";
+import { RefreshCw, X, FileText, FileSpreadsheet, Users, BarChart3, CheckCircle2, AlertCircle, Clock } from "lucide-react";
+import type { Report, ItemTone, ChecklistStatus } from "@/lib/mock-data";
 
 const itemIcon: Record<string, typeof FileText> = {
   "Final Report": FileText,
@@ -17,14 +17,13 @@ const itemTone: Record<ItemTone, { dot: string; text: string }> = {
   failed: { dot: "bg-danger", text: "text-danger-foreground" },
 };
 
-function Meta({ label, value }: { label: string; value: React.ReactNode }) {
-  return (
-    <div className="space-y-1">
-      <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{label}</div>
-      <div className="text-sm text-foreground">{value}</div>
-    </div>
-  );
-}
+const checkOrder: Record<ChecklistStatus, number> = { Failed: 0, Pending: 1, Completed: 2 };
+
+const checkVisual: Record<ChecklistStatus, { Icon: typeof CheckCircle2; color: string }> = {
+  Failed: { Icon: AlertCircle, color: "text-danger" },
+  Pending: { Icon: Clock, color: "text-muted-foreground" },
+  Completed: { Icon: CheckCircle2, color: "text-success" },
+};
 
 export function ReportDrawer({
   report,
@@ -35,27 +34,26 @@ export function ReportDrawer({
   open: boolean;
   onOpenChange: (v: boolean) => void;
 }) {
+  const checks = report ? [...report.checklist].sort((a, b) => checkOrder[a.status] - checkOrder[b.status]) : [];
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="w-[560px] gap-0 overflow-y-auto border-l border-border bg-background p-0 shadow-drawer sm:max-w-[560px] [&>button]:hidden"
+        className="flex w-[560px] flex-col gap-0 overflow-hidden border-l border-border bg-background p-0 shadow-drawer sm:max-w-[560px] [&>button]:hidden"
       >
         {report ? (
           <>
-            <div className="sticky top-0 z-10 border-b border-border bg-card px-6 py-5">
+            <div className="border-b border-border bg-card px-6 py-5">
               <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h2 className="text-base font-semibold text-foreground">{report.title}</h2>
-                  <p className="mt-0.5 text-xs text-muted-foreground">
-                    {report.category} • {report.frequency}
+                <div className="min-w-0">
+                  <h2 className="truncate text-base font-semibold text-foreground">{report.title}</h2>
+                  <p className="tabular mt-1 text-xs text-muted-foreground">
+                    {report.frequency} • {report.period}
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Button size="sm" variant="outline" className="h-8 gap-1.5 text-xs">
-                    <RefreshCw className="size-3.5" />
-                    Regenerate
-                  </Button>
+                <div className="flex shrink-0 items-center gap-3">
+                  <StatusBadge tone={reportTone(report.status)} label={report.status} />
                   <button
                     onClick={() => onOpenChange(false)}
                     className="flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
@@ -65,49 +63,28 @@ export function ReportDrawer({
                   </button>
                 </div>
               </div>
-
-              <div className="mt-5 grid grid-cols-4 gap-4">
-                <Meta label="Frequency" value={report.frequency} />
-                <Meta label="Period" value={<span className="tabular">{report.period}</span>} />
-                <Meta
-                  label="Status"
-                  value={<StatusBadge tone={reportTone(report.status)} label={report.status} />}
-                />
-                <Meta label="Last Updated" value={<span className="tabular">{report.lastUpdatedFull}</span>} />
+              <div className="tabular mt-4 text-xs text-muted-foreground">
+                Last updated {report.lastUpdatedFull}
               </div>
             </div>
 
-            <div className="space-y-8 px-6 py-6">
+            <div className="flex-1 space-y-8 overflow-y-auto px-6 py-6">
               <section>
-                <h3 className="text-sm font-semibold text-foreground">Checklist</h3>
-                <p className="mt-0.5 text-xs text-muted-foreground">
-                  Required data and prerequisites for report generation.
-                </p>
-                <div className="mt-3 overflow-hidden rounded-xl border border-border bg-card shadow-card">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b border-border bg-surface text-left text-[11px] uppercase tracking-wider text-muted-foreground">
-                        <th className="px-4 py-2.5 font-medium">Checklist</th>
-                        <th className="px-4 py-2.5 font-medium">Status</th>
-                        <th className="px-4 py-2.5 font-medium">Summary</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {report.checklist.map((c) => (
-                        <tr key={c.name} className="border-b border-border last:border-0">
-                          <td className="whitespace-nowrap px-4 py-2.5 font-medium text-foreground">{c.name}</td>
-                          <td className="px-4 py-2.5">
-                            <StatusBadge
-                              tone={c.status === "Failed" ? "danger" : reportTone(c.status)}
-                              label={c.status}
-                            />
-                          </td>
-                          <td className="px-4 py-2.5 text-muted-foreground">{c.summary}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <h3 className="text-sm font-semibold text-foreground">Checks</h3>
+                <ul className="mt-3 space-y-px overflow-hidden rounded-xl border border-border bg-card">
+                  {checks.map((c) => {
+                    const { Icon, color } = checkVisual[c.status];
+                    return (
+                      <li key={c.name} className="flex items-start gap-3 border-b border-border px-4 py-3 last:border-0">
+                        <Icon className={`mt-0.5 size-4 shrink-0 ${color}`} />
+                        <div className="min-w-0">
+                          <div className="text-sm font-medium text-foreground">{c.name}</div>
+                          <div className="mt-0.5 text-xs text-muted-foreground">{c.summary}</div>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
               </section>
 
               <section>
@@ -122,35 +99,42 @@ export function ReportDrawer({
                     report.generated.map((g) => {
                       const Icon = itemIcon[g.name] ?? FileText;
                       return (
-                      <div
-                        key={g.name}
-                        className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3.5 shadow-card"
-                      >
-                        <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md bg-secondary text-muted-foreground">
-                          <Icon className="size-3.5" />
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center justify-between gap-3">
-                            <span className="text-sm font-medium text-foreground">{g.name}</span>
-                            <span
-                              className={`inline-flex items-center gap-1.5 text-xs font-medium ${itemTone[g.tone].text}`}
-                            >
-                              <span className={`size-1.5 rounded-full ${itemTone[g.tone].dot}`} />
-                              {g.result}
-                            </span>
-                          </div>
-                          {g.lines.map((l) => (
-                            <div key={l} className="mt-1 truncate text-xs text-muted-foreground">
-                              {l}
+                        <div
+                          key={g.name}
+                          className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3.5"
+                        >
+                          <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md bg-secondary text-muted-foreground">
+                            <Icon className="size-3.5" />
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="text-sm font-medium text-foreground">{g.name}</span>
+                              <span
+                                className={`inline-flex items-center gap-1.5 text-xs font-medium ${itemTone[g.tone].text}`}
+                              >
+                                <span className={`size-1.5 rounded-full ${itemTone[g.tone].dot}`} />
+                                {g.result}
+                              </span>
                             </div>
-                          ))}
+                            {g.lines.map((l) => (
+                              <div key={l} className="mt-1 truncate text-xs text-muted-foreground">
+                                {l}
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
                       );
                     })
                   )}
                 </div>
               </section>
+            </div>
+
+            <div className="border-t border-border bg-card px-6 py-4">
+              <Button size="sm" className="h-9 w-full gap-1.5 text-xs">
+                <RefreshCw className="size-3.5" />
+                Regenerate
+              </Button>
             </div>
           </>
         ) : null}
