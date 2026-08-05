@@ -7,6 +7,8 @@ import { StatusBadge, reportTone } from "@/components/StatusBadge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { kpis, reports, type Report } from "@/lib/mock-data";
+import { LogoutButton } from "@/components/LogoutButton";
+import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -37,6 +39,7 @@ const kpiAccent: Record<string, string> = {
 };
 
 function Dashboard() {
+  const { ready, logout } = useAuth();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [frequency, setFrequency] = useState("all");
@@ -47,7 +50,7 @@ function Dashboard() {
     () =>
       reports.filter(
         (r) =>
-          (category === "all" || r.category === category) &&
+          (category === "all" || (r.category === "PBI" ? "PBI" : "Performance") === category) &&
           (frequency === "all" || r.frequency === frequency) &&
           (status === "all" || r.status === status) &&
           (r.title.toLowerCase().includes(query.toLowerCase()) ||
@@ -57,6 +60,8 @@ function Dashboard() {
     [query, category, frequency, status],
   );
 
+  if (!ready) return null;
+
   return (
     <div className="min-h-screen bg-background">
       <AppSidebar />
@@ -64,9 +69,12 @@ function Dashboard() {
         <header className="flex h-16 items-center justify-between border-b border-border bg-card px-8">
           <div>
             <h1 className="text-sm font-semibold text-foreground">Dashboard</h1>
-            <p className="text-xs text-muted-foreground">Reporting period · 20 Jul – 02 Aug 2026</p>
+            <p className="text-xs text-muted-foreground">Monitor reports for the current reporting cycle</p>
           </div>
-          <span className="tabular text-xs text-muted-foreground">Last refreshed 04 Aug 2026 09:45</span>
+          <div className="flex items-center gap-4">
+            <span className="tabular text-xs text-muted-foreground">Last refreshed 04 Aug 2026 09:45</span>
+            <LogoutButton onClick={logout} />
+          </div>
         </header>
 
         <div className="mx-auto max-w-[1320px] space-y-8 px-8 py-8">
@@ -102,11 +110,8 @@ function Dashboard() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All categories</SelectItem>
-                    <SelectItem value="EP">EP</SelectItem>
-                    <SelectItem value="Physio">Physio</SelectItem>
-                    <SelectItem value="POD">POD</SelectItem>
-                    <SelectItem value="Psych">Psych</SelectItem>
                     <SelectItem value="PBI">PBI</SelectItem>
+                    <SelectItem value="Performance">Performance</SelectItem>
                   </SelectContent>
                 </Select>
                 <Select value={frequency} onValueChange={setFrequency}>
