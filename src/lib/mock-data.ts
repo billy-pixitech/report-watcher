@@ -264,6 +264,7 @@ export type JobStatus = "Healthy" | "Warning" | "Failed";
 
 export type Job = {
   name: string;
+  schedule: string;
   description: string;
   lastRun: string;
   nextRun: string;
@@ -274,21 +275,24 @@ export type Job = {
 export const jobs: Job[] = [
   {
     name: "Crawl Nookal",
-    description: "Daily 02:00 • Crawl appointments from Nookal",
+    schedule: "Daily 02:00",
+    description: "Crawl appointments from Nookal",
     lastRun: "Today 02:01",
     nextRun: "Tomorrow 02:00",
     status: "Healthy",
   },
   {
     name: "Upload PracSuite",
-    description: "Daily 02:30 • Import PracSuite data",
+    schedule: "Daily 02:30",
+    description: "Import PracSuite data",
     lastRun: "Today 02:31",
     nextRun: "Tomorrow 02:30",
     status: "Healthy",
   },
   {
     name: "Upload OM",
-    description: "Daily 03:00 • Import OM source data",
+    schedule: "Daily 03:00",
+    description: "Import OM source data",
     lastRun: "Today 03:00",
     nextRun: "Tomorrow 03:00",
     status: "Failed",
@@ -296,21 +300,24 @@ export const jobs: Job[] = [
   },
   {
     name: "Upload eHero",
-    description: "Daily 03:30 • Import eHero data",
+    schedule: "Daily 03:30",
+    description: "Import eHero data",
     lastRun: "Today 03:31",
     nextRun: "Tomorrow 03:30",
     status: "Healthy",
   },
   {
     name: "Generate Draft Report",
-    description: "Every 2 hours • Generate draft reports",
+    schedule: "Every 2 hours",
+    description: "Generate draft reports",
     lastRun: "Today 10:00",
     nextRun: "Today 12:00",
     status: "Healthy",
   },
   {
     name: "Generate Final Report",
-    description: "Daily 08:00 • Generate final reports",
+    schedule: "Daily 08:00",
+    description: "Generate final reports",
     lastRun: "Yesterday 08:00",
     nextRun: "Today 08:00",
     status: "Warning",
@@ -318,14 +325,16 @@ export const jobs: Job[] = [
   },
   {
     name: "Publish Power BI",
-    description: "Every 30 minutes • Publish reports to Power BI",
+    schedule: "Every 30 minutes",
+    description: "Publish reports to Power BI",
     lastRun: "Today 09:30",
     nextRun: "Today 10:00",
     status: "Healthy",
   },
   {
     name: "Cleanup Temp Files",
-    description: "Daily 23:30 • Remove temporary files",
+    schedule: "Daily 23:30",
+    description: "Remove temporary files",
     lastRun: "Yesterday 23:30",
     nextRun: "Today 23:30",
     status: "Healthy",

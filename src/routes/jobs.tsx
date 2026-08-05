@@ -6,6 +6,8 @@ import { StatusBadge, reportTone } from "@/components/StatusBadge";
 import { jobs, type JobStatus } from "@/lib/mock-data";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { LogoutButton } from "@/components/LogoutButton";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/jobs")({
   head: () => ({
@@ -26,6 +28,7 @@ export const Route = createFileRoute("/jobs")({
 });
 
 function JobsPage() {
+  const { ready, logout } = useAuth();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<JobStatus | "all">("all");
 
@@ -35,10 +38,13 @@ function JobsPage() {
         (j) =>
           (status === "all" || j.status === status) &&
           (j.name.toLowerCase().includes(query.toLowerCase()) ||
-            j.description.toLowerCase().includes(query.toLowerCase())),
+            j.description.toLowerCase().includes(query.toLowerCase()) ||
+            j.schedule.toLowerCase().includes(query.toLowerCase())),
       ),
     [query, status],
   );
+
+  if (!ready) return null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -49,10 +55,13 @@ function JobsPage() {
             <h1 className="text-sm font-semibold text-foreground">Jobs</h1>
             <p className="text-xs text-muted-foreground">Scheduled background jobs</p>
           </div>
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <span>6 healthy</span>
-            <span className="text-warning-foreground">1 warning</span>
-            <span className="text-danger-foreground">1 failed</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <span>6 healthy</span>
+              <span className="text-warning-foreground">1 warning</span>
+              <span className="text-danger-foreground">1 failed</span>
+            </div>
+            <LogoutButton onClick={logout} />
           </div>
         </header>
 
@@ -97,11 +106,15 @@ function JobsPage() {
                   {rows.map((j) => (
                     <tr key={j.name} className="border-b border-border last:border-0 hover:bg-surface">
                       <td className="whitespace-nowrap px-4 py-3 font-medium text-foreground">{j.name}</td>
-                      <td className="px-4 py-3 text-muted-foreground">{j.description}</td>
+                      <td className="px-4 py-3">
+                        <div className="text-foreground">{j.description}</div>
+                        <div className="tabular text-xs text-muted-foreground">{j.schedule}</div>
+                      </td>
                       <td className="tabular whitespace-nowrap px-4 py-3 text-muted-foreground">{j.lastRun}</td>
                       <td className="tabular whitespace-nowrap px-4 py-3 text-muted-foreground">{j.nextRun}</td>
                       <td className="px-4 py-3">
-                        <StatusBadge tone={reportTone(j.status)} label={j.status} detail={j.reason} />
+                        <StatusBadge tone={reportTone(j.status)} label={j.status} />
+                        {j.reason ? <div className="mt-1 text-xs text-muted-foreground">{j.reason}</div> : null}
                       </td>
                     </tr>
                   ))}

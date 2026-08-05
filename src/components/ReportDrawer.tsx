@@ -49,7 +49,7 @@ export function ReportDrawer({
                 <div className="min-w-0">
                   <h2 className="truncate text-base font-semibold text-foreground">{report.title}</h2>
                   <p className="tabular mt-1 text-xs text-muted-foreground">
-                    {report.frequency} • {report.period}
+                    {report.frequency} • {report.category === "PBI" ? "PBI" : "Performance"}
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-3">
@@ -63,8 +63,23 @@ export function ReportDrawer({
                   </button>
                 </div>
               </div>
-              <div className="tabular mt-4 text-xs text-muted-foreground">
-                Last updated {report.lastUpdatedFull}
+              <div className="mt-4 grid grid-cols-3 gap-3">
+                <div className="rounded-lg border border-border bg-surface px-3 py-2.5">
+                  <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Period</div>
+                  <div className="tabular mt-1 text-sm text-foreground">{report.period}</div>
+                </div>
+                <div className="rounded-lg border border-border bg-surface px-3 py-2.5">
+                  <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Checks</div>
+                  <div className="tabular mt-1 text-sm text-foreground">
+                    {report.checklistDone} / {report.checklistTotal}
+                  </div>
+                </div>
+                <div className="rounded-lg border border-border bg-surface px-3 py-2.5">
+                  <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                    Last updated
+                  </div>
+                  <div className="tabular mt-1 text-sm text-foreground">{report.lastUpdatedFull}</div>
+                </div>
               </div>
             </div>
 
@@ -88,8 +103,8 @@ export function ReportDrawer({
               </section>
 
               <section>
-                <h3 className="text-sm font-semibold text-foreground">Generated Items</h3>
-                <p className="mt-0.5 text-xs text-muted-foreground">Artifacts and publishing results.</p>
+                <h3 className="text-sm font-semibold text-foreground">Deliverables</h3>
+                <p className="mt-0.5 text-xs text-muted-foreground">Generated outputs for this report</p>
                 <div className="mt-3 space-y-2">
                   {report.generated.length === 0 ? (
                     <div className="rounded-xl border border-dashed border-border bg-card px-4 py-8 text-center text-sm text-muted-foreground">
