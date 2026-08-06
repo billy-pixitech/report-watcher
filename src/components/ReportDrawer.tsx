@@ -89,16 +89,20 @@ export function ReportDrawer({
                 <ul className="mt-3 space-y-px overflow-hidden rounded-xl border border-border bg-card">
                   {checks.map((c) => {
                     const { Icon, color } = checkVisual[c.status];
+                    const failed = c.status === "Failed";
                     return (
                       <li key={c.name} className="flex items-start gap-3 border-b border-border px-4 py-3 last:border-0">
                         <Icon className={`mt-0.5 size-4 shrink-0 ${color}`} />
                         <div className="min-w-0">
                           <div className="text-sm font-medium text-foreground">{c.name}</div>
-                          <div className="mt-0.5 text-xs text-muted-foreground">{c.summary}</div>
+                          <div className={`mt-0.5 text-xs ${failed ? "font-medium text-danger" : "text-muted-foreground"}`}>
+                            {c.summary}
+                          </div>
                         </div>
                       </li>
                     );
                   })}
+
                 </ul>
               </section>
 
