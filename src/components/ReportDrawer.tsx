@@ -3,6 +3,7 @@ import { StatusBadge, reportTone } from "@/components/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, X, FileText, FileSpreadsheet, Users, BarChart3, CheckCircle2, AlertCircle, Clock } from "lucide-react";
 import type { Report, ItemTone, ChecklistStatus } from "@/lib/mock-data";
+import { cn } from "@/lib/utils";
 
 const itemIcon: Record<string, typeof FileText> = {
   "Final Report": FileText,
@@ -70,7 +71,16 @@ export function ReportDrawer({
                 </div>
                 <div className="rounded-lg border border-border bg-surface px-3 py-2.5">
                   <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Checks</div>
-                  <div className="tabular mt-1 text-sm text-foreground">
+                  <div
+                    className={cn(
+                      "tabular mt-1 text-sm",
+                      report.checklistDone === report.checklistTotal
+                        ? "text-success-foreground"
+                        : report.checklistDone === 0
+                          ? "text-foreground"
+                          : "text-warning-foreground",
+                    )}
+                  >
                     {report.checklistDone} / {report.checklistTotal}
                   </div>
                 </div>
