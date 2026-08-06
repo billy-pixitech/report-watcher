@@ -3,6 +3,7 @@ import { StatusBadge, reportTone } from "@/components/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, X, FileText, FileSpreadsheet, Users, BarChart3, CheckCircle2, AlertCircle, Clock } from "lucide-react";
 import type { Report, ItemTone, ChecklistStatus } from "@/lib/mock-data";
+import { cn } from "@/lib/utils";
 
 const itemIcon: Record<string, typeof FileText> = {
   "Final Report": FileText,
