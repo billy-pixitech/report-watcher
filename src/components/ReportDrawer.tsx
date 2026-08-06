@@ -117,6 +117,7 @@ export function ReportDrawer({
                   ) : (
                     report.generated.map((g) => {
                       const Icon = itemIcon[g.name] ?? FileText;
+                      const failed = g.tone === "failed";
                       return (
                         <div
                           key={g.name}
@@ -136,7 +137,10 @@ export function ReportDrawer({
                               </span>
                             </div>
                             {g.lines.map((l) => (
-                              <div key={l} className="mt-1 truncate text-xs text-muted-foreground">
+                              <div
+                                key={l}
+                                className={`mt-1 truncate text-xs ${failed ? "font-medium text-danger" : "text-muted-foreground"}`}
+                              >
                                 {l}
                               </div>
                             ))}
@@ -144,6 +148,7 @@ export function ReportDrawer({
                         </div>
                       );
                     })
+
                   )}
                 </div>
               </section>
