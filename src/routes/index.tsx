@@ -38,6 +38,14 @@ const kpiAccent: Record<string, string> = {
   muted: "text-muted-foreground",
 };
 
+const kpiCard: Record<string, string> = {
+  neutral: "border-border bg-card",
+  success: "border-success/50 bg-success-soft",
+  warning: "border-warning/50 bg-warning-soft",
+  danger: "border-danger/50 bg-danger-soft",
+  muted: "border-border bg-card",
+};
+
 function Dashboard() {
   const { ready, logout } = useAuth();
   const [query, setQuery] = useState("");
@@ -80,7 +88,7 @@ function Dashboard() {
         <div className="mx-auto max-w-[1320px] space-y-8 px-8 py-8">
           <section className="grid grid-cols-4 gap-4">
             {kpis.map((k) => (
-              <div key={k.label} className="rounded-xl border border-border bg-card p-4 shadow-card">
+              <div key={k.label} className={cn("rounded-xl border p-4 shadow-card", kpiCard[k.tone])}>
                 <div className="text-xs font-medium text-muted-foreground">{k.label}</div>
                 <div className={cn("tabular mt-2 text-3xl font-semibold", kpiAccent[k.tone])}>
                   {k.total ? `${k.value}/${k.total}` : k.value}
