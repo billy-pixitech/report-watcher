@@ -70,7 +70,16 @@ export function ReportDrawer({
                 </div>
                 <div className="rounded-lg border border-border bg-surface px-3 py-2.5">
                   <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Checks</div>
-                  <div className="tabular mt-1 text-sm text-foreground">
+                  <div
+                    className={cn(
+                      "tabular mt-1 text-sm",
+                      report.checklistDone === report.checklistTotal
+                        ? "text-success-foreground"
+                        : report.checklistDone === 0
+                          ? "text-foreground"
+                          : "text-warning-foreground",
+                    )}
+                  >
                     {report.checklistDone} / {report.checklistTotal}
                   </div>
                 </div>
