@@ -253,12 +253,12 @@ export const reports: Report[] = [
 ];
 
 export const kpis = [
-  { label: "Total Reports", value: 18, tone: "neutral" as const },
-  { label: "Published", value: 8, tone: "success" as const },
+  { label: "Published", value: 8, total: 18, tone: "success" as const },
   { label: "Draft", value: 6, tone: "warning" as const },
   { label: "Failed", value: 2, tone: "danger" as const },
   { label: "Not Started", value: 2, tone: "muted" as const },
 ];
+
 
 export type JobStatus = "Healthy" | "Warning" | "Failed";
 

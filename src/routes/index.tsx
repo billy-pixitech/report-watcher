@@ -78,14 +78,17 @@ function Dashboard() {
         </header>
 
         <div className="mx-auto max-w-[1320px] space-y-8 px-8 py-8">
-          <section className="grid grid-cols-5 gap-4">
+          <section className="grid grid-cols-4 gap-4">
             {kpis.map((k) => (
               <div key={k.label} className="rounded-xl border border-border bg-card p-4 shadow-card">
                 <div className="text-xs font-medium text-muted-foreground">{k.label}</div>
-                <div className={cn("tabular mt-2 text-3xl font-semibold", kpiAccent[k.tone])}>{k.value}</div>
+                <div className={cn("tabular mt-2 text-3xl font-semibold", kpiAccent[k.tone])}>
+                  {k.total ? `${k.value}/${k.total}` : k.value}
+                </div>
               </div>
             ))}
           </section>
+
 
           <section>
             <h2 className="text-sm font-semibold text-foreground">Current Reports</h2>
