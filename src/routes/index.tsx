@@ -38,6 +38,14 @@ const kpiAccent: Record<string, string> = {
   muted: "text-muted-foreground",
 };
 
+const kpiCard: Record<string, string> = {
+  neutral: "border-border bg-card",
+  success: "border-success/50 bg-success-soft",
+  warning: "border-warning/50 bg-warning-soft",
+  danger: "border-danger/50 bg-danger-soft",
+  muted: "border-border bg-card",
+};
+
 function Dashboard() {
   const { ready, logout } = useAuth();
   const [query, setQuery] = useState("");

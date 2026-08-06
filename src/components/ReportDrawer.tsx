@@ -69,18 +69,18 @@ export function ReportDrawer({
                   <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Period</div>
                   <div className="tabular mt-1 text-sm text-foreground">{report.period}</div>
                 </div>
-                <div className="rounded-lg border border-border bg-surface px-3 py-2.5">
+                <div
+                  className={cn(
+                    "rounded-lg border px-3 py-2.5",
+                    report.checklistDone === report.checklistTotal
+                      ? "border-success/50 bg-success-soft"
+                      : report.checklistDone === 0
+                        ? "border-border bg-surface"
+                        : "border-warning/50 bg-warning-soft",
+                  )}
+                >
                   <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Checks</div>
-                  <div
-                    className={cn(
-                      "tabular mt-1 text-sm",
-                      report.checklistDone === report.checklistTotal
-                        ? "text-success-foreground"
-                        : report.checklistDone === 0
-                          ? "text-foreground"
-                          : "text-warning-foreground",
-                    )}
-                  >
+                  <div className="tabular mt-1 text-sm text-foreground">
                     {report.checklistDone} / {report.checklistTotal}
                   </div>
                 </div>
