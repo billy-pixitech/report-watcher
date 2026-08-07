@@ -1,7 +1,18 @@
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { StatusBadge, reportTone } from "@/components/StatusBadge";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, X, FileText, FileSpreadsheet, Users, BarChart3, CheckCircle2, AlertCircle, Clock } from "lucide-react";
+import {
+  RefreshCw,
+  X,
+  FileText,
+  FileSpreadsheet,
+  Users,
+  BarChart3,
+  CheckCircle2,
+  AlertCircle,
+  Clock,
+  ExternalLink,
+} from "lucide-react";
 import type { Report, ItemTone, ChecklistStatus } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 
@@ -129,16 +140,22 @@ export function ReportDrawer({
                       const Icon = itemIcon[g.name] ?? FileText;
                       const failed = g.tone === "failed";
                       return (
-                        <div
+                        <a
                           key={g.name}
-                          className="flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3.5"
+                          href={g.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3.5 transition-colors hover:border-foreground/20 hover:bg-surface"
                         >
                           <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md bg-secondary text-muted-foreground">
                             <Icon className="size-3.5" />
                           </span>
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center justify-between gap-3">
-                              <span className="text-sm font-medium text-foreground">{g.name}</span>
+                              <span className="flex items-center gap-1.5 text-sm font-medium text-foreground">
+                                {g.name}
+                                <ExternalLink className="size-3 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+                              </span>
                               <span
                                 className={`inline-flex items-center gap-1.5 text-xs font-medium ${itemTone[g.tone].text}`}
                               >
@@ -155,7 +172,7 @@ export function ReportDrawer({
                               </div>
                             ))}
                           </div>
-                        </div>
+                        </a>
                       );
                     })
 
