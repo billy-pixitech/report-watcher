@@ -50,23 +50,24 @@ function Dashboard() {
   const { ready, logout } = useAuth();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
-  const [frequency, setFrequency] = useState("all");
   const [status, setStatus] = useState("all");
   const [selected, setSelected] = useState<Report | null>(null);
 
-  const rows = useMemo(
+  const filtered = useMemo(
     () =>
       reports.filter(
         (r) =>
           (category === "all" || (r.category === "PBI" ? "PBI" : "Performance") === category) &&
-          (frequency === "all" || r.frequency === frequency) &&
           (status === "all" || r.status === status) &&
           (r.title.toLowerCase().includes(query.toLowerCase()) ||
             r.category.toLowerCase().includes(query.toLowerCase()) ||
             r.period.toLowerCase().includes(query.toLowerCase())),
       ),
-    [query, category, frequency, status],
+    [query, category, status],
   );
+
+  const fortnightRows = filtered.filter((r) => r.frequency === "Fortnight");
+  const monthlyRows = filtered.filter((r) => r.frequency === "Monthly");
 
   if (!ready) return null;
 
@@ -97,15 +98,13 @@ function Dashboard() {
             ))}
           </section>
 
-
-          <section>
-            <h2 className="text-sm font-semibold text-foreground">Current Reports</h2>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              All reports belonging to the current reporting period.
-            </p>
-
-            <div className="mt-4 rounded-xl border border-border bg-card shadow-card">
-              <div className="flex items-center gap-3 border-b border-border px-4 py-3">
+          <section className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-sm font-semibold text-foreground">Current Reports</h2>
+                <p className="mt-0.5 text-xs text-muted-foreground">All reports for the active reporting periods.</p>
+              </div>
+              <div className="flex items-center gap-3">
                 <div className="relative w-64">
                   <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
@@ -125,16 +124,6 @@ function Dashboard() {
                     <SelectItem value="Performance">Performance</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select value={frequency} onValueChange={setFrequency}>
-                  <SelectTrigger className="h-9 w-40 bg-surface text-sm">
-                    <SelectValue placeholder="Frequency" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All frequencies</SelectItem>
-                    <SelectItem value="Fortnight">Fortnight</SelectItem>
-                    <SelectItem value="Monthly">Monthly</SelectItem>
-                  </SelectContent>
-                </Select>
                 <Select value={status} onValueChange={setStatus}>
                   <SelectTrigger className="h-9 w-40 bg-surface text-sm">
                     <SelectValue placeholder="Status" />
@@ -147,85 +136,97 @@ function Dashboard() {
                     <SelectItem value="Failed">Failed</SelectItem>
                   </SelectContent>
                 </Select>
-                <span className="ml-auto text-xs text-muted-foreground">{rows.length} reports</span>
-              </div>
-
-              <div className="max-h-[560px] overflow-auto">
-                <table className="w-full text-sm">
-                  <thead className="sticky top-0 z-10 bg-surface">
-                    <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
-                      <th className="border-b border-border px-4 py-2.5 font-medium">Report</th>
-                      <th className="border-b border-border px-4 py-2.5 font-medium">Period</th>
-                      <th className="border-b border-border px-4 py-2.5 font-medium">Status</th>
-                      <th className="border-b border-border px-4 py-2.5 font-medium">Checks</th>
-                      <th className="border-b border-border px-4 py-2.5 font-medium">Last Updated</th>
-                      <th className="w-10 border-b border-border px-4 py-2.5" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rows.map((r) => (
-                      <tr
-                        key={r.id}
-                        onClick={() => setSelected(r)}
-                        className="group cursor-pointer border-b border-border last:border-0 hover:bg-surface"
-                      >
-                        <td className="px-4 py-3">
-                          <div className="font-medium text-foreground">{r.title}</div>
-                          <div className="text-xs text-muted-foreground">
-                            {r.category === "PBI" ? "PBI" : "Performance"}
-                          </div>
-                        </td>
-                        <td className="whitespace-nowrap px-4 py-3">
-                          <div className="text-foreground">{r.frequency}</div>
-                          <div className="tabular text-xs text-muted-foreground">{r.period}</div>
-                        </td>
-                        <td className="px-4 py-3">
-                          <StatusBadge tone={reportTone(r.status)} label={r.status} />
-                        </td>
-                        <td className="px-4 py-3">
-                          <span
-                            className={cn(
-                              "tabular text-sm",
-                              r.checklistDone === r.checklistTotal
-                                ? "text-success-foreground"
-                                : "text-muted-foreground",
-                            )}
-                          >
-                            {r.checklistDone} / {r.checklistTotal}
-                          </span>
-                        </td>
-                        <td className="tabular whitespace-nowrap px-4 py-3 text-muted-foreground">{r.lastUpdated}</td>
-                        <td className="px-4 py-3">
-                          <ChevronRight className="size-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="flex items-center justify-between border-t border-border px-4 py-3 text-xs text-muted-foreground">
-                <span>
-                  Showing 1–{rows.length} of {rows.length}
-                </span>
-                <div className="flex items-center gap-1">
-                  <button className="rounded-md border border-border px-2.5 py-1 text-foreground/50" disabled>
-                    Previous
-                  </button>
-                  <button className="rounded-md border border-border bg-secondary px-2.5 py-1 text-foreground">
-                    1
-                  </button>
-                  <button className="rounded-md border border-border px-2.5 py-1 text-foreground/50" disabled>
-                    Next
-                  </button>
-                </div>
               </div>
             </div>
+
+            <ReportSection
+              title="Fortnight Reports"
+              subtitle="20 Jul – 02 Aug 2026"
+              rows={fortnightRows}
+              onSelect={setSelected}
+            />
+            <ReportSection
+              title="Monthly Reports"
+              subtitle="Jul 2026"
+              rows={monthlyRows}
+              onSelect={setSelected}
+            />
           </section>
         </div>
       </main>
 
       <ReportDrawer report={selected} open={selected !== null} onOpenChange={(v) => !v && setSelected(null)} />
+    </div>
+  );
+}
+
+function ReportSection({
+  title,
+  subtitle,
+  rows,
+  onSelect,
+}: {
+  title: string;
+  subtitle: string;
+  rows: Report[];
+  onSelect: (r: Report) => void;
+}) {
+  return (
+    <div className="rounded-xl border border-border bg-card shadow-card">
+      <div className="flex items-center justify-between border-b border-border px-4 py-3">
+        <div>
+          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+          <p className="text-xs text-muted-foreground">{subtitle}</p>
+        </div>
+        <span className="text-xs text-muted-foreground">{rows.length} reports</span>
+      </div>
+
+      <div className="max-h-[360px] overflow-auto">
+        <table className="w-full text-sm">
+          <thead className="sticky top-0 z-10 bg-surface">
+            <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
+              <th className="border-b border-border px-4 py-2.5 font-medium">Report</th>
+              <th className="border-b border-border px-4 py-2.5 font-medium">Status</th>
+              <th className="border-b border-border px-4 py-2.5 font-medium">Checks</th>
+              <th className="border-b border-border px-4 py-2.5 font-medium">Last Updated</th>
+              <th className="w-10 border-b border-border px-4 py-2.5" />
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr
+                key={r.id}
+                onClick={() => onSelect(r)}
+                className="group cursor-pointer border-b border-border last:border-0 hover:bg-surface"
+              >
+                <td className="px-4 py-3">
+                  <div className="font-medium text-foreground">{r.title}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {r.category === "PBI" ? "PBI" : "Performance"}
+                  </div>
+                </td>
+                <td className="px-4 py-3">
+                  <StatusBadge tone={reportTone(r.status)} label={r.status} />
+                </td>
+                <td className="px-4 py-3">
+                  <span
+                    className={cn(
+                      "tabular text-sm",
+                      r.checklistDone === r.checklistTotal ? "text-success-foreground" : "text-muted-foreground",
+                    )}
+                  >
+                    {r.checklistDone} / {r.checklistTotal}
+                  </span>
+                </td>
+                <td className="tabular whitespace-nowrap px-4 py-3 text-muted-foreground">{r.lastUpdated}</td>
+                <td className="px-4 py-3">
+                  <ChevronRight className="size-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
