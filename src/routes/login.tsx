@@ -42,7 +42,7 @@ function LoginPage() {
           </span>
           <div className="leading-tight">
             <div className="text-sm font-semibold text-foreground">Report Monitoring</div>
-            <div className="text-[11px] text-muted-foreground">CA</div>
+            <div className="text-[11px] text-muted-foreground">CAHC</div>
           </div>
         </div>
 
