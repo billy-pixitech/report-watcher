@@ -15,7 +15,7 @@ export function AppSidebar() {
         </span>
         <div className="leading-tight">
           <div className="text-sm font-semibold text-foreground">Report Monitoring</div>
-          <div className="text-[11px] text-muted-foreground">Operations</div>
+          <div className="text-[11px] text-muted-foreground">CAHC</div>
         </div>
       </div>
 
