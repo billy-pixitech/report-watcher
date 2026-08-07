@@ -14,6 +14,7 @@ export type GeneratedItem = {
   result: string;
   tone: ItemTone;
   lines: string[];
+  url: string;
 };
 
 export type Report = {
@@ -70,50 +71,73 @@ const notStartedChecklist: ChecklistItem[] = [
   { name: "eHero Data Upload", status: "Pending", summary: "Waiting for YYYYMMDD_eHero.xlsx" },
 ];
 
-const draftItems = (period: string, code: string, freq: string): GeneratedItem[] => [
-  {
-    icon: "📄",
-    name: "Final Report",
-    result: "Draft generated",
-    tone: "draft",
-    lines: ["20260802_Final_Report.xlsx"],
-  },
-  {
-    icon: "📑",
-    name: "Master Report",
-    result: "Draft generated",
-    tone: "draft",
-    lines: [`Worksheet: ${period}`, `MASTER_${code}_${freq}_Performance_Report.xlsx`],
-  },
-  { icon: "👥", name: "Lead Reports", result: "Draft generated", tone: "draft", lines: ["42 Lead reports generated"] },
-  { icon: "📊", name: "Power BI", result: "Draft published", tone: "draft", lines: ["Performance Dashboard"] },
-];
+const SHAREPOINT = "https://cahc.sharepoint.com/sites/reporting/Shared%20Documents";
+const POWER_BI = "https://app.powerbi.com/groups/me/reports/cahc-performance";
 
-const publishedItems = (period: string, code: string, freq: string): GeneratedItem[] => [
-  { icon: "📄", name: "Final Report", result: "Final generated", tone: "final", lines: ["20260802_Final_Report.xlsx"] },
-  {
-    icon: "📑",
-    name: "Master Report",
-    result: "Final generated",
-    tone: "final",
-    lines: [`Worksheet: ${period}`, `MASTER_${code}_${freq}_Performance_Report.xlsx`],
-  },
-  { icon: "👥", name: "Lead Reports", result: "Final generated", tone: "final", lines: ["42 Lead reports generated"] },
-  { icon: "📊", name: "Power BI", result: "Published", tone: "final", lines: ["Performance Dashboard"] },
-];
+const finalReport = (code: string, tone: ItemTone, result: string): GeneratedItem => ({
+  icon: "📄",
+  name: "Final Report",
+  result,
+  tone,
+  lines: [`20260802_${code}_Final_Report.xlsx`],
+  url: `${SHAREPOINT}/Final/20260802_${code}_Final_Report.xlsx`,
+});
 
-const failedItems = (period: string, code: string, freq: string): GeneratedItem[] => [
-  { icon: "📄", name: "Final Report", result: "Draft generated", tone: "draft", lines: ["20260802_Final_Report.xlsx"] },
-  {
-    icon: "📑",
-    name: "Master Report",
-    result: "Draft generated",
-    tone: "draft",
-    lines: [`Worksheet: ${period}`, `MASTER_${code}_${freq}_Performance_Report.xlsx`],
-  },
-  { icon: "👥", name: "Lead Reports", result: "Failed", tone: "failed", lines: ["2 of 42 Lead reports failed"] },
-  { icon: "📊", name: "Power BI", result: "Publish failed", tone: "failed", lines: ["Performance Dashboard"] },
-];
+const masterReport = (period: string, code: string, freq: string, tone: ItemTone, result: string): GeneratedItem => ({
+  icon: "📑",
+  name: "Master Report",
+  result,
+  tone,
+  lines: [`Worksheet: ${period}`, `MASTER_${code}_${freq}_Performance_Report.xlsx`],
+  url: `${SHAREPOINT}/Master/MASTER_${code}_${freq}_Performance_Report.xlsx`,
+});
+
+const leadReports = (code: string, tone: ItemTone, result: string, line: string): GeneratedItem => ({
+  icon: "👥",
+  name: "Lead Reports",
+  result,
+  tone,
+  lines: [line],
+  url: `${SHAREPOINT}/Leads/${code}`,
+});
+
+const powerBi = (tone: ItemTone, result: string): GeneratedItem => ({
+  icon: "📊",
+  name: "Power BI",
+  result,
+  tone,
+  lines: ["Performance Dashboard"],
+  url: POWER_BI,
+});
+
+const isPbi = (code: string) => code === "PBI";
+
+const draftItems = (period: string, code: string, freq: string): GeneratedItem[] =>
+  isPbi(code)
+    ? [finalReport(code, "draft", "Draft generated"), powerBi("draft", "Draft published")]
+    : [
+        masterReport(period, code, freq, "draft", "Draft generated"),
+        leadReports(code, "draft", "Draft generated", "42 Lead reports generated"),
+        powerBi("draft", "Draft published"),
+      ];
+
+const publishedItems = (period: string, code: string, freq: string): GeneratedItem[] =>
+  isPbi(code)
+    ? [finalReport(code, "final", "Final generated"), powerBi("final", "Published")]
+    : [
+        masterReport(period, code, freq, "final", "Final generated"),
+        leadReports(code, "final", "Final generated", "42 Lead reports generated"),
+        powerBi("final", "Published"),
+      ];
+
+const failedItems = (period: string, code: string, freq: string): GeneratedItem[] =>
+  isPbi(code)
+    ? [finalReport(code, "draft", "Draft generated"), powerBi("failed", "Publish failed")]
+    : [
+        masterReport(period, code, freq, "draft", "Draft generated"),
+        leadReports(code, "failed", "Failed", "2 of 42 Lead reports failed"),
+        powerBi("failed", "Publish failed"),
+      ];
 
 const FORTNIGHT = "20 Jul – 02 Aug 2026";
 const MONTH = "Jul 2026";
