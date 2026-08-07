@@ -80,7 +80,7 @@ function Dashboard() {
             <p className="text-xs text-muted-foreground">Monitor reports for the current reporting cycle</p>
           </div>
           <div className="flex items-center gap-4">
-            <span className="tabular text-xs text-muted-foreground">Last refreshed 04 Aug 2026 09:45</span>
+            <span className="tabular text-xs text-muted-foreground">Administrator</span>
             <LogoutButton onClick={logout} />
           </div>
         </header>
