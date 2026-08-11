@@ -38,12 +38,12 @@ const kpiAccent: Record<string, string> = {
   muted: "text-muted-foreground",
 };
 
-const kpiCard: Record<string, string> = {
-  neutral: "border-border bg-card",
-  success: "border-success/50 bg-success-soft",
-  warning: "border-warning/50 bg-warning-soft",
-  danger: "border-danger/50 bg-danger-soft",
-  muted: "border-border bg-card",
+const kpiBar: Record<string, string> = {
+  neutral: "border-l-border",
+  success: "border-l-success",
+  warning: "border-l-warning",
+  danger: "border-l-danger",
+  muted: "border-l-muted",
 };
 
 function Dashboard() {
