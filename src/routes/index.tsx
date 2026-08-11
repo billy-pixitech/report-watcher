@@ -98,10 +98,6 @@ function Dashboard() {
             ))}
           </section>
 
-          <section className="space-y-6">
-            <div />
-          </section>
-
           <section className="space-y-3">
             <div>
               <h2 className="text-sm font-semibold text-foreground">Reporting Cadences</h2>
