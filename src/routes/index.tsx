@@ -93,7 +93,7 @@ function Dashboard() {
                 key={k.label}
                 className={cn(
                   "rounded-xl border border-l-4 bg-card p-4 shadow-card",
-                  kpiBar[k.tone] ?? kpiBar.neutral,
+                  kpiBar[k.tone] ?? kpiBar["neutral"],
                 )}
               >
                 <div className="text-xs font-medium text-muted-foreground">{k.label}</div>
