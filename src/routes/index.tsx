@@ -6,7 +6,7 @@ import { ReportDrawer } from "@/components/ReportDrawer";
 import { StatusBadge, reportTone } from "@/components/StatusBadge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { kpis, reports, type Report } from "@/lib/mock-data";
+import { cadences, kpis, reports, type Report, type Cadence } from "@/lib/mock-data";
 import { LogoutButton } from "@/components/LogoutButton";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
@@ -96,6 +96,22 @@ function Dashboard() {
                 </div>
               </div>
             ))}
+          </section>
+
+          <section className="space-y-6">
+            <div />
+          </section>
+
+          <section className="space-y-3">
+            <div>
+              <h2 className="text-sm font-semibold text-foreground">Reporting Cadences</h2>
+              <p className="mt-0.5 text-xs text-muted-foreground">Previous, current and next run per reporting cycle.</p>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {cadences.map((c) => (
+                <CadenceCard key={c.frequency} cadence={c} />
+              ))}
+            </div>
           </section>
 
           <section className="space-y-6">
