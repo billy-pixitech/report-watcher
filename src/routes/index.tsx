@@ -6,7 +6,7 @@ import { ReportDrawer } from "@/components/ReportDrawer";
 import { StatusBadge, reportTone } from "@/components/StatusBadge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { kpis, reports, type Report } from "@/lib/mock-data";
+import { cadences, kpis, reports, type Report, type Cadence } from "@/lib/mock-data";
 import { LogoutButton } from "@/components/LogoutButton";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
@@ -98,6 +98,18 @@ function Dashboard() {
             ))}
           </section>
 
+          <section className="space-y-3">
+            <div>
+              <h2 className="text-sm font-semibold text-foreground">Reporting Cadences</h2>
+              <p className="mt-0.5 text-xs text-muted-foreground">Previous, current and next run per reporting cycle.</p>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {cadences.map((c) => (
+                <CadenceCard key={c.frequency} cadence={c} />
+              ))}
+            </div>
+          </section>
+
           <section className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
@@ -161,6 +173,51 @@ function Dashboard() {
 }
 
 function ReportSection({
+  title,
+  subtitle,
+  rows,
+  onSelect,
+}: {
+  title: string;
+  subtitle: string;
+  rows: Report[];
+  onSelect: (r: Report) => void;
+}) {
+  return <ReportSectionInner title={title} subtitle={subtitle} rows={rows} onSelect={onSelect} />;
+}
+
+function CadenceCard({ cadence }: { cadence: Cadence }) {
+  const rows = [
+    { label: "Previous Run", ...cadence.previous, tone: "muted" as const },
+    { label: "Current Run", ...cadence.current, tone: "current" as const },
+    { label: "Next Run", ...cadence.next, tone: "muted" as const },
+  ];
+  return (
+    <div className="rounded-xl border border-border bg-card p-4 shadow-card">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-foreground">{cadence.frequency}</h3>
+        <span className="rounded-full bg-secondary px-2 py-0.5 text-xs text-secondary-foreground">Cycle</span>
+      </div>
+      <div className="mt-3 grid grid-cols-3 gap-3">
+        {rows.map((r) => (
+          <div
+            key={r.label}
+            className={cn(
+              "rounded-lg border p-3",
+              r.tone === "current" ? "border-primary/40 bg-surface" : "border-border bg-surface/60",
+            )}
+          >
+            <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{r.label}</div>
+            <div className="tabular mt-1 text-sm font-medium text-foreground">{r.period}</div>
+            <div className="tabular mt-0.5 text-xs text-muted-foreground">{r.date}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ReportSectionInner({
   title,
   subtitle,
   rows,
