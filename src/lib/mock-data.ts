@@ -278,7 +278,6 @@ export const reports: Report[] = [
 
 export type Cadence = {
   frequency: "Fortnight" | "Monthly";
-  previous: { period: string; date: string };
   current: { period: string; date: string };
   next: { period: string; date: string };
 };
@@ -286,15 +285,13 @@ export type Cadence = {
 export const cadences: Cadence[] = [
   {
     frequency: "Fortnight",
-    previous: { period: "06 Jul – 19 Jul 2026", date: "Run 21 Jul 2026 08:00" },
-    current: { period: "20 Jul – 02 Aug 2026", date: "Run 04 Aug 2026 09:42" },
-    next: { period: "03 Aug – 16 Aug 2026", date: "Runs 18 Aug 2026 08:00" },
+    current: { period: "20 Jul – 02 Aug 2026", date: "04 Aug 2026" },
+    next: { period: "03 Aug – 16 Aug 2026", date: "18 Aug 2026" },
   },
   {
     frequency: "Monthly",
-    previous: { period: "Jun 2026", date: "Run 02 Jul 2026 18:20" },
-    current: { period: "Jul 2026", date: "Run 02 Aug 2026 18:20" },
-    next: { period: "Aug 2026", date: "Runs 02 Sep 2026 18:00" },
+    current: { period: "Jul 2026", date: "02 Aug 2026" },
+    next: { period: "Aug 2026", date: "02 Sep 2026" },
   },
 ];
 
