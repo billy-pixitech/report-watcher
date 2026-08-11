@@ -276,7 +276,6 @@ export const reports: Report[] = [
   },
 ];
 
-export const kpis = [
 export type Cadence = {
   frequency: "Fortnight" | "Monthly";
   previous: { period: string; date: string };
