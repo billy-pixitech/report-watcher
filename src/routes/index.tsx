@@ -194,9 +194,8 @@ function ReportSection({
 
 function CadenceCard({ cadence }: { cadence: Cadence }) {
   const rows = [
-    { label: "Previous Run", ...cadence.previous, tone: "muted" as const },
-    { label: "Current Run", ...cadence.current, tone: "current" as const },
-    { label: "Next Run", ...cadence.next, tone: "muted" as const },
+    { label: "Current", run: cadence.current.date, period: cadence.current.period, tone: "current" as const },
+    { label: "Next", run: cadence.next.date, period: cadence.next.period, tone: "muted" as const },
   ];
   return (
     <div className="rounded-xl border border-border bg-card p-4 shadow-card">
@@ -204,7 +203,7 @@ function CadenceCard({ cadence }: { cadence: Cadence }) {
         <h3 className="text-sm font-semibold text-foreground">{cadence.frequency}</h3>
         <span className="rounded-full bg-secondary px-2 py-0.5 text-xs text-secondary-foreground">Cycle</span>
       </div>
-      <div className="mt-3 grid grid-cols-3 gap-3">
+      <div className="mt-3 grid grid-cols-2 gap-3">
         {rows.map((r) => (
           <div
             key={r.label}
@@ -213,9 +212,9 @@ function CadenceCard({ cadence }: { cadence: Cadence }) {
               r.tone === "current" ? "border-primary/40 bg-surface" : "border-border bg-surface/60",
             )}
           >
-            <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{r.label}</div>
-            <div className="tabular mt-1 text-sm font-medium text-foreground">{r.period}</div>
-            <div className="tabular mt-0.5 text-xs text-muted-foreground">{r.date}</div>
+            <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{r.label} Run</div>
+            <div className="tabular mt-1 text-sm font-semibold text-foreground">{r.run}</div>
+            <div className="tabular mt-0.5 text-xs text-muted-foreground">{r.period}</div>
           </div>
         ))}
       </div>
