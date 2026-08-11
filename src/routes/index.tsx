@@ -107,7 +107,7 @@ function Dashboard() {
           <section className="space-y-3">
             <div>
               <h2 className="text-sm font-semibold text-foreground">Reporting Cadences</h2>
-              <p className="mt-0.5 text-xs text-muted-foreground">Previous, current and next run per reporting cycle.</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">Current and next run dates for each reporting cycle.</p>
             </div>
             <div className="grid grid-cols-2 gap-4">
               {cadences.map((c) => (
