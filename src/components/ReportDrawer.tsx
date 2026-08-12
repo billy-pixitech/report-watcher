@@ -13,7 +13,8 @@ import {
   Clock,
   ExternalLink,
 } from "lucide-react";
-import type { Report, ItemTone, ChecklistStatus } from "@/lib/mock-data";
+import type { Report, ItemTone, ChecklistStatus, ReportJobStatus } from "@/lib/mock-data";
+import { reportJobs } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 
 const itemIcon: Record<string, typeof FileText> = {
@@ -35,6 +36,22 @@ const checkVisual: Record<ChecklistStatus, { Icon: typeof CheckCircle2; color: s
   Failed: { Icon: AlertCircle, color: "text-danger" },
   Pending: { Icon: Clock, color: "text-muted-foreground" },
   Completed: { Icon: CheckCircle2, color: "text-success" },
+};
+
+const jobTone: Record<ReportJobStatus, "success" | "warning" | "danger" | "muted" | "info"> = {
+  Scheduled: "muted",
+  Running: "info",
+  Retrying: "warning",
+  Success: "success",
+  Failed: "danger",
+};
+
+const jobOrder: Record<ReportJobStatus, number> = {
+  Failed: 0,
+  Retrying: 1,
+  Running: 2,
+  Scheduled: 3,
+  Success: 4,
 };
 
 export function ReportDrawer({
