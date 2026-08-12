@@ -196,6 +196,38 @@ export function ReportDrawer({
                   )}
                 </div>
               </section>
+
+              <section>
+                <h3 className="text-sm font-semibold text-foreground">Jobs</h3>
+                <p className="mt-0.5 text-xs text-muted-foreground">Pipeline jobs for this report</p>
+                <ul className="mt-3 overflow-hidden rounded-xl border border-border bg-card">
+                  {[...reportJobs]
+                    .sort((a, b) => jobOrder[a.status] - jobOrder[b.status])
+                    .map((j) => (
+                      <li key={j.name} className="border-b border-border px-4 py-3 last:border-0">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <div className="text-sm font-medium text-foreground">{j.name}</div>
+                            <div className="tabular mt-1 text-xs text-muted-foreground">
+                              Scheduled {j.scheduled} • Updated {j.updated}
+                            </div>
+                          </div>
+                          <StatusBadge tone={jobTone[j.status]} label={j.status} />
+                        </div>
+                        {j.message ? (
+                          <div
+                            className={cn(
+                              "mt-1.5 text-xs",
+                              j.status === "Failed" ? "font-medium text-danger" : "text-muted-foreground",
+                            )}
+                          >
+                            {j.message}
+                          </div>
+                        ) : null}
+                      </li>
+                    ))}
+                </ul>
+              </section>
             </div>
 
             <div className="border-t border-border bg-card px-6 py-4">
