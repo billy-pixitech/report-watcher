@@ -24,10 +24,10 @@ const itemIcon: Record<string, typeof FileText> = {
   "Power BI": BarChart3,
 };
 
-const itemTone: Record<ItemTone, { dot: string; text: string }> = {
-  draft: { dot: "bg-warning", text: "text-warning-foreground" },
-  final: { dot: "bg-success", text: "text-success-foreground" },
-  failed: { dot: "bg-danger", text: "text-danger-foreground" },
+const itemTone: Record<ItemTone, "success" | "warning" | "danger"> = {
+  draft: "warning",
+  final: "success",
+  failed: "danger",
 };
 
 const checkOrder: Record<ChecklistStatus, number> = { Failed: 0, Pending: 1, Completed: 2 };
@@ -173,12 +173,7 @@ export function ReportDrawer({
                                 {g.name}
                                 <ExternalLink className="size-3 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
                               </span>
-                              <span
-                                className={`inline-flex items-center gap-1.5 text-xs font-medium ${itemTone[g.tone].text}`}
-                              >
-                                <span className={`size-1.5 rounded-full ${itemTone[g.tone].dot}`} />
-                                {g.result}
-                              </span>
+                              <StatusBadge tone={itemTone[g.tone]} label={g.result} />
                             </div>
                             {g.lines.map((l) => (
                               <div
