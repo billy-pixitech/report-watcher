@@ -389,6 +389,7 @@ export type ReportJob = {
   name: string;
   status: ReportJobStatus;
   scheduled: string;
+  timezone: string;
   updated: string;
   message?: string;
 };
@@ -398,18 +399,21 @@ export const reportJobs: ReportJob[] = [
     name: "Crawl Nookal Activity",
     status: "Success",
     scheduled: "04 Aug 2026 02:00",
+    timezone: "AEST",
     updated: "04 Aug 2026 02:04",
   },
   {
     name: "Upload PracSuite Data",
     status: "Success",
     scheduled: "04 Aug 2026 02:30",
+    timezone: "AEST",
     updated: "04 Aug 2026 02:33",
   },
   {
     name: "Upload OM Billing",
     status: "Failed",
     scheduled: "04 Aug 2026 03:00",
+    timezone: "AEST",
     updated: "04 Aug 2026 03:02",
     message: "Source file 20260802_OM_Billing.xlsx not found in /Inbound/OM",
   },
@@ -417,6 +421,7 @@ export const reportJobs: ReportJob[] = [
     name: "Upload eHero Data",
     status: "Retrying",
     scheduled: "04 Aug 2026 03:30",
+    timezone: "AEST",
     updated: "04 Aug 2026 09:30",
     message: "Attempt 2 of 3 — eHero API returned 503",
   },
@@ -424,18 +429,21 @@ export const reportJobs: ReportJob[] = [
     name: "Generate Draft Report",
     status: "Running",
     scheduled: "04 Aug 2026 09:40",
+    timezone: "AEST",
     updated: "04 Aug 2026 09:42",
   },
   {
     name: "Generate Final Report",
     status: "Scheduled",
     scheduled: "05 Aug 2026 08:00",
+    timezone: "AEST",
     updated: "04 Aug 2026 08:00",
   },
   {
     name: "Publish Power BI",
     status: "Scheduled",
     scheduled: "05 Aug 2026 08:30",
+    timezone: "AEST",
     updated: "04 Aug 2026 08:30",
   },
 ];

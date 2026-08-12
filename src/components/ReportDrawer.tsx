@@ -203,14 +203,13 @@ export function ReportDrawer({
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
                             <div className="text-sm font-medium text-foreground">{j.name}</div>
-                            <div className="mt-1.5 flex items-center gap-2">
+                            <div className="mt-1.5 flex items-center gap-2 text-xs text-foreground">
                               <Clock className="size-3.5 text-muted-foreground" />
-                              <div className="min-w-0">
-                                <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                                  Scheduled
-                                </div>
-                                <div className="tabular text-xs text-foreground">{j.scheduled}</div>
-                              </div>
+                              <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                                Scheduled
+                              </span>
+                              <span className="tabular-nums">{j.scheduled}</span>
+                              <span className="text-muted-foreground">{j.timezone}</span>
                             </div>
                             <div className="mt-1 text-xs text-muted-foreground">Updated {j.updated}</div>
                           </div>
