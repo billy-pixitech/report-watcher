@@ -6,8 +6,6 @@ import { StatusBadge, reportTone } from "@/components/StatusBadge";
 import { jobs, type JobStatus } from "@/lib/mock-data";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { LogoutButton } from "@/components/LogoutButton";
-import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/jobs")({
   head: () => ({
@@ -28,7 +26,6 @@ export const Route = createFileRoute("/jobs")({
 });
 
 function JobsPage() {
-  const { ready, logout } = useAuth();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<JobStatus | "all">("all");
 
@@ -43,8 +40,6 @@ function JobsPage() {
       ),
     [query, status],
   );
-
-  if (!ready) return null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -61,7 +56,6 @@ function JobsPage() {
               <span className="text-warning-foreground">1 warning</span>
               <span className="text-danger-foreground">1 failed</span>
             </div>
-            <LogoutButton onClick={logout} />
           </div>
         </header>
 
