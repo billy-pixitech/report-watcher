@@ -7,8 +7,6 @@ import { StatusBadge, reportTone } from "@/components/StatusBadge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cadences, kpis, reports, type Report, type Cadence } from "@/lib/mock-data";
-import { LogoutButton } from "@/components/LogoutButton";
-import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -47,7 +45,6 @@ const kpiBar: Record<string, string> = {
 };
 
 function Dashboard() {
-  const { ready, logout } = useAuth();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [status, setStatus] = useState("all");
@@ -69,8 +66,6 @@ function Dashboard() {
   const fortnightRows = filtered.filter((r) => r.frequency === "Fortnight");
   const monthlyRows = filtered.filter((r) => r.frequency === "Monthly");
 
-  if (!ready) return null;
-
   return (
     <div className="min-h-screen bg-background">
       <AppSidebar />
@@ -82,7 +77,6 @@ function Dashboard() {
           </div>
           <div className="flex items-center gap-4">
             <span className="tabular text-xs text-muted-foreground">Administrator</span>
-            <LogoutButton onClick={logout} />
           </div>
         </header>
 
